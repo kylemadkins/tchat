@@ -5,20 +5,21 @@ from langchain.prompts import (
     HumanMessagePromptTemplate,
     ChatPromptTemplate,
 )
-from langchain.memory import ConversationBufferMemory, FileChatMessageHistory
+from langchain.memory import ConversationSummaryMemory, FileChatMessageHistory
 from dotenv import load_dotenv
 
 load_dotenv()
 
-chat = ChatOpenAI()
+chat = ChatOpenAI(verbose=True)
 
 # return_messages=True formats the messages
 # for chat-based models instead of regular strings
 # i.e. HumanMessage, AIMessage
-memory = ConversationBufferMemory(
+memory = ConversationSummaryMemory.from_messages(
+    llm=chat,
     chat_memory=FileChatMessageHistory("memory/messages.json"),
-    memory_key="messages",
     return_messages=True,
+    memory_key="messages",
 )
 
 prompt = ChatPromptTemplate(
@@ -31,7 +32,7 @@ prompt = ChatPromptTemplate(
     ],
 )
 
-chain = LLMChain(llm=chat, prompt=prompt, memory=memory)
+chain = LLMChain(llm=chat, prompt=prompt, memory=memory, verbose=True)
 
 while True:
     content = input("> ")

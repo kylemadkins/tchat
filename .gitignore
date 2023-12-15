@@ -7,4 +7,4 @@ __pycache__
 .vscode
 *.png
 .ruff_cache
-memory/*
+memory/*.json
